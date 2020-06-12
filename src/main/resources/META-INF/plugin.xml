@@ -1,0 +1,27 @@
+<idea-plugin>
+    <id>sigmu.SimpleInfer</id>
+    <name>SimpleInfer</name>
+    <vendor email="sigmund@u.nus.edu">NUS</vendor>
+
+    <description><![CDATA[
+    An Infer Integration plugin that provides a Run Configuration for Infer and a Problems tab for Infer's results
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="testy window" secondary="true" anchor="bottom"
+                factoryClass="sigmu.simpleinfer.ui.InferToolWindowFactory"/>
+        <projectService serviceImplementation="sigmu.simpleinfer.ResultParser"/>
+        <configurationType implementation="sigmu.simpleinfer.run.InferRunConfigurationType"/>
+    </extensions>
+
+    <actions>
+        <group id="infer.menu" text="SimpleInfer" description="Infer menu">
+            <add-to-group group-id="MainMenu" anchor="last"/>
+            <action class="sigmu.simpleinfer.actions.ParseAction" id="infer.parseaction" text="Parse"/>
+        </group>
+    </actions>
+</idea-plugin>
