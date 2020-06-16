@@ -24,7 +24,7 @@
             </constraints>
             <properties>
               <anchor value=""/>
-              <text resource-bundle="strings" key="additional.arguments"/>
+              <text resource-bundle="strings" key="run.command"/>
             </properties>
           </component>
           <component id="27d1a" class="com.intellij.ui.components.fields.ExpandableTextField" binding="additionalArgsTextField">
