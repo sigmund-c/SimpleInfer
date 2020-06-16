@@ -2,7 +2,7 @@
 An IntelliJ plugin to run Infer and display its results.
 
 # Usage
-1. Edit the Run configuration named "Generated Infer Config" to your Infer run command (example: "infer run -- mvn compile"
+1. Add a Run configuration of the type "Infer" and change the "run command" parameter (example: "infer run -- mvn compile"
 2. Run the configuration
 3. Go to the SimpleInfer tab at the top and do the Parse action (will be automated in the future)
 
