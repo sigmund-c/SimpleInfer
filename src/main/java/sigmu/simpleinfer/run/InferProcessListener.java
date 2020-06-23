@@ -1,6 +1,6 @@
 package sigmu.simpleinfer.run;
 
-import sigmu.simpleinfer.ResultParser;
+import sigmu.simpleinfer.parser.ResultParser;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

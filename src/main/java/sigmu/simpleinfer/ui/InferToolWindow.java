@@ -2,7 +2,7 @@
 
 package sigmu.simpleinfer.ui;
 
-import sigmu.simpleinfer.ResultParser;
+import sigmu.simpleinfer.parser.ResultParser;
 import sigmu.simpleinfer.model.InferBug;
 import sigmu.simpleinfer.model.ResultListEntry;
 
@@ -17,7 +17,6 @@ import javax.swing.tree.TreeModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;

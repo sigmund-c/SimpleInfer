@@ -1,6 +1,6 @@
 // Original code by Friedrich Hudinjan of "Infer Integration"
 
-package sigmu.simpleinfer;
+package sigmu.simpleinfer.parser;
 
 import sigmu.simpleinfer.model.InferBug;
 
