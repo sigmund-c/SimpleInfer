@@ -6,6 +6,7 @@ import sigmu.simpleinfer.parser.ResultParser;
 import sigmu.simpleinfer.model.InferBug;
 import sigmu.simpleinfer.model.ResultListEntry;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -17,6 +18,10 @@ import javax.swing.tree.TreeModel;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -24,6 +29,7 @@ import com.intellij.openapi.editor.LogicalPosition;
 import com.intellij.openapi.editor.ScrollType;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.FilenameIndex;
@@ -33,13 +39,35 @@ import com.intellij.ui.JBColor;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.treeStructure.Tree;
 
-public class InferToolWindow {
+public class InferToolWindow extends SimpleToolWindowPanel {
     private static final Logger log = Logger.getInstance(InferToolWindow.class);
 
     private JPanel InferToolWindowContent;
     private Tree issueList;
 
     public InferToolWindow(ToolWindow toolWindow, Project project) {
+        super(false, true);
+
+        final ActionManager actionManager = com.intellij.openapi.actionSystem.ActionManager.getInstance();
+        DefaultActionGroup actionGroup = new DefaultActionGroup("ACTION_GROUP", false);
+        actionGroup.add(ActionManager.getInstance().getAction("infer.menu"));
+
+        ActionToolbar actionToolbar = actionManager.createActionToolbar("ACTION_TOOLBAR", actionGroup, false);
+        actionToolbar.setOrientation(SwingConstants.HORIZONTAL);
+
+//        Box toolBarBox = Box.createHorizontalBox();
+//        toolBarBox.add(actionToolbar.getComponent());
+//
+//        add(toolBarBox, BorderLayout.WEST);
+//
+//        toolBarBox.add()
+
+        this.setToolbar(actionToolbar.getComponent());
+        actionToolbar.setTargetComponent(this);
+
+        add(InferToolWindowContent);
+
+
         issueList.getEmptyText().setText(ResourceBundle.getBundle("strings").getString("no.bug.list.to.show"));
         issueList.setModel(new DefaultTreeModel(null));
 
@@ -55,6 +83,7 @@ public class InferToolWindow {
             public void customizeCellRenderer(@NotNull JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus){
                 if (((DefaultMutableTreeNode)value).getUserObject() instanceof ResultListEntry) {
                     final ResultListEntry bug = (ResultListEntry) ((DefaultMutableTreeNode)value).getUserObject();
+                    append(bug.getFileName() + " ");
                     append("Line: " + bug.getLine(), new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, JBColor.blue));
                     if (bug.getColumn() >= 0) {
                         append(" Column: " + bug.getColumn(), new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, JBColor.blue));
@@ -68,7 +97,7 @@ public class InferToolWindow {
                 }
 
                 else {
-                    append(value.toString(), new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, JBColor.green));
+                    append(value.toString(), new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, JBColor.blue));
                 }
 
             }
@@ -106,7 +135,7 @@ public class InferToolWindow {
         drawBugTree(ResultParser.getInstance(project).getBugsPerFile());
     }
 
-    JPanel getContent() {
+    public JPanel getContent() {
         return InferToolWindowContent;
     }
 

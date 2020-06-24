@@ -14,7 +14,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 
-public class ParseAction extends AnAction {
+public class ParseByFileAction extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent event) {

@@ -29,9 +29,9 @@ public class ErrorAnnotator extends ExternalAnnotator<Map<String, List<InferBug>
 
 
         final Path reportPath = Paths.get(project.getBasePath() + "/infer-out/report.json");
-        Map<String, List<InferBug>> a = ResultParser.getInstance(project).parse(reportPath);
+        Map<String, List<InferBug>> collectedBugs = ResultParser.getInstance(project).parse(reportPath);
 
-        return a;
+        return collectedBugs;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ErrorAnnotator extends ExternalAnnotator<Map<String, List<InferBug>
 
             for (InferBug bug: fileBugs.getValue()) {
                 TextRange bugRange = new TextRange(document.getLineStartOffset(bug.getLine() - 1), document.getLineEndOffset(bug.getLine() - 1)); // -1 because getLineEndOffset is 0-indexed
-                Annotation errorProperty = holder.createErrorAnnotation(bugRange, bug.toString());
+                Annotation errorProperty = holder.createErrorAnnotation(bugRange, bug.toString()); // Text that shows up when cursor hovers over annotation
 
                 TextAttributesKey ErrorAttributes = TextAttributesKey.createTextAttributesKey("INFER_ERROR", HighlighterColors.BAD_CHARACTER);
                 errorProperty.setTextAttributes(ErrorAttributes);

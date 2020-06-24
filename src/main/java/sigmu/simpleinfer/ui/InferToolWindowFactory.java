@@ -13,7 +13,7 @@ public class InferToolWindowFactory implements ToolWindowFactory {
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         InferToolWindow inferToolWindow = new InferToolWindow(toolWindow, project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content content = contentFactory.createContent(inferToolWindow.getContent(), "Infer Results", false);
+        Content content = contentFactory.createContent(inferToolWindow, "Infer Results", false);
         toolWindow.getContentManager().addContent(content);
     }
 }

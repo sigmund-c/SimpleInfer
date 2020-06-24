@@ -30,6 +30,7 @@ public class ResultParser {
     private static final Logger log = Logger.getInstance(ResultParser.class);
 
     private Map<String, List<InferBug>> bugsPerFile;
+    private List<InferBug> bugs;
     private PropertyChangeSupport changes = new PropertyChangeSupport( this );
 
     public ResultParser() {
@@ -52,6 +53,22 @@ public class ResultParser {
         }
         try {
             rearrangeBugList(readBugList(resultPath));
+            return getBugsPerFile();
+        } catch (IOException e) {
+            log.error("Could not parse given result file", e);
+        } catch(JsonSyntaxException e) {
+            log.error("Invalid JSON Syntax in Infer report file");
+        }
+        return null;
+    }
+
+    public Map<String, List<InferBug>> parseByBugType(Path resultPath) {
+        if(!Files.exists(resultPath)) {
+            log.warn("report.json does not exist - aborting parsing");
+            return null;
+        }
+        try {
+            rearrangeBugListByBugType(readBugList(resultPath));
             return getBugsPerFile();
         } catch (IOException e) {
             log.error("Could not parse given result file", e);
@@ -94,6 +111,22 @@ public class ResultParser {
         setBugsPerFile(map);
     }
 
+    private void rearrangeBugListByBugType(List<InferBug> bugList) {
+        Map<String, List<InferBug>> map = new HashMap<>();
+        for(InferBug bug : bugList) {
+            if(map.containsKey(bug.getBugType())) {
+                map.get(bug.getBugType()).add(bug);
+            }
+            else {
+                final List<InferBug> list = new ArrayList<>();
+                list.add(bug);
+                map.put(bug.getBugType(), list);
+            }
+        }
+
+        setBugsPerFile(map);
+    }
+
     public Map<String, List<InferBug>> getBugsPerFile() {
         return bugsPerFile;
     }
@@ -102,6 +135,14 @@ public class ResultParser {
         Map<String, List<InferBug>> oldMap = this.bugsPerFile;
         this.bugsPerFile = bugsPerFile;
         changes.firePropertyChange("bugsPerFile", oldMap, bugsPerFile);
+    }
+
+    private List<InferBug> getBugs() {
+        return bugs;
+    }
+
+    private void setBugs(List<InferBug> bugs) {
+        this.bugs = bugs;
     }
 
     public void addPropertyChangeListener(PropertyChangeListener l) {

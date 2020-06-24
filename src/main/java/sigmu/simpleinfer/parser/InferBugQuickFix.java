@@ -9,7 +9,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.util.IncorrectOperationException;
 
 /**
- * A quick fix implementation of future machine generated code fixes (currently a stub)
+ * A quick fix implementation of future machine generated code fixes. (currently a stub)
  */
 public class InferBugQuickFix extends BaseIntentionAction {
 
@@ -30,7 +30,7 @@ public class InferBugQuickFix extends BaseIntentionAction {
 
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return false;
+        return false; // Quick fix won't show up
     }
 
     @Override
