@@ -17,7 +17,7 @@
         <projectService serviceImplementation="sigmu.simpleinfer.parser.ResultParser"/>
         <configurationType implementation="sigmu.simpleinfer.run.InferRunConfigurationType"/>
         <externalAnnotator language="JAVA" implementationClass="sigmu.simpleinfer.parser.ErrorAnnotator"/>
-        <projectConfigurable instance="sigmu.simpleinfer.config.InferConfigurable" id="infer.settings" nonDefaultProject="true"/>
+
     </extensions>
 
     <actions>

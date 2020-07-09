@@ -21,7 +21,7 @@ public class InferRunConfigurationType implements ConfigurationType {
 
     @Override
     public Icon getIcon() {
-        return IconLoader.getIcon("/META-INF/pluginIcon.svg");
+        return null;
     }
 
     @NotNull

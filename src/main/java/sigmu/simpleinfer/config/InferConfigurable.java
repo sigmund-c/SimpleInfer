@@ -1,18 +1,50 @@
 package sigmu.simpleinfer.config;
 
-import org.ini4j.Config;
+import sigmu.simpleinfer.ui.InferConfigPanel;
+
+import javax.swing.*;
+
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.project.Project;
 
 public class InferConfigurable implements Configurable {
-    private Config config;
+    private final Project project;
+    private final InferConfigPanel configPanel;
 
-    public Config getConfig() {
-        return config;
+    private String runCmd;
+
+    public InferConfigurable(@NotNull final Project project, @NotNull final InferConfigPanel configPanel) {
+        this.project = project;
+        this.configPanel = new InferConfigPanel();
+        runCmd = "infer run -- mvn compile";
     }
 
-    public void setConfig(Config config) {
-        this.config = config;
+    @Override
+    public @Nls(capitalization = Nls.Capitalization.Title) String getDisplayName() {
+        return "Infer Configuration";
+    }
+
+    @Override
+    public @Nullable JComponent createComponent() {
+        reset();
+        return configPanel;
+    }
+
+    @Override
+    public boolean isModified() {
+        return false;
+    }
+
+    public void apply() {
+        runCmd = configPanel.getRunCmd();
+    }
+
+    public String getRunCmd() {
+        return runCmd;
     }
 
 }

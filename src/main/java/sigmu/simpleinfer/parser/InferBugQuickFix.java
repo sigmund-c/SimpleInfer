@@ -30,7 +30,7 @@ public class InferBugQuickFix extends BaseIntentionAction {
 
     @Override
     public boolean isAvailable(@NotNull Project project, Editor editor, PsiFile file) {
-        return false; // Quick fix won't show up
+        return true; // Quick fix won't show up
     }
 
     @Override

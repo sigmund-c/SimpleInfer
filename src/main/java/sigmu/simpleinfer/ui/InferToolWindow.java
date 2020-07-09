@@ -135,9 +135,9 @@ public class InferToolWindow extends SimpleToolWindowPanel {
         drawBugTree(ResultParser.getInstance(project).getBugsPerFile());
     }
 
-    public JPanel getContent() {
+    /*public JPanel getContent() {
         return InferToolWindowContent;
-    }
+    }*/
 
     private void drawBugTree(Map<String, List<InferBug>> bugMap) {
         if (bugMap == null) return;
