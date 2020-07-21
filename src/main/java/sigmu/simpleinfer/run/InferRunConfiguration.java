@@ -2,6 +2,7 @@ package sigmu.simpleinfer.run;
 
 import sigmu.simpleinfer.ui.RunConfigurationEditor;
 
+import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,8 +16,12 @@ import com.intellij.execution.configurations.RuntimeConfigurationException;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.JDOMExternalizerUtil;
 
 public class InferRunConfiguration extends RunConfigurationBase {
+    private static final String LAUNCH_COMMAND = "SIMPLE_INFER-LAUNCH_COMMAND";
+
     private Project project;
     String launchCommand;
 
@@ -24,6 +29,18 @@ public class InferRunConfiguration extends RunConfigurationBase {
         super(project, factory, name);
         this.project = project;
         launchCommand = "infer run -- mvn package";
+    }
+
+    @Override
+    public void readExternal(@NotNull Element element) throws InvalidDataException {
+        super.readExternal(element);
+        launchCommand = JDOMExternalizerUtil.readField(element, LAUNCH_COMMAND);
+    }
+
+    @Override
+    public void writeExternal(@NotNull Element element) throws InvalidDataException {
+        super.writeExternal(element);
+        JDOMExternalizerUtil.writeField(element, LAUNCH_COMMAND, launchCommand);
     }
 
     @NotNull

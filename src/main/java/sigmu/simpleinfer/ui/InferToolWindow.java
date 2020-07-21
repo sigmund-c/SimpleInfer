@@ -72,7 +72,7 @@ public class InferToolWindow extends SimpleToolWindowPanel {
         issueList.setModel(new DefaultTreeModel(null));
 
         ResultParser.getInstance(project).addPropertyChangeListener(evt -> {
-            if(evt.getNewValue() != null && evt.getPropertyName().equals("bugsPerFile")) {
+            if(evt.getNewValue() != null && evt.getPropertyName().equals("bugsMap")) {
                 drawBugTree((Map<String, List<InferBug>>)evt.getNewValue());
             }
         });
@@ -132,7 +132,7 @@ public class InferToolWindow extends SimpleToolWindowPanel {
             }
         }));
 
-        drawBugTree(ResultParser.getInstance(project).getBugsPerFile());
+        drawBugTree(ResultParser.getInstance(project).getBugsMap());
     }
 
     /*public JPanel getContent() {

@@ -1,6 +1,7 @@
 package sigmu.simpleinfer.parser;
 
 import sigmu.simpleinfer.model.InferBug;
+import sigmu.simpleinfer.model.InferBugFix;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,14 +23,17 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 
 public class ErrorAnnotator extends ExternalAnnotator<Map<String, List<InferBug>>, Map<String, List<InferBug>>> {
+    Map<String, List<InferBugFix>> fixesMap;
 
     @Override
     public Map<String, List<InferBug>> collectInformation(@NotNull PsiFile file) {
         Project project = file.getProject();
 
-
         final Path reportPath = Paths.get(project.getBasePath() + "/infer-out/report.json");
         Map<String, List<InferBug>> collectedBugs = ResultParser.getInstance(project).parse(reportPath);
+
+        final Path fixesPath = Paths.get(project.getBasePath() + "/infer-out/reportfixes.json");
+        fixesMap = FixParser.getInstance(project).parse(fixesPath);
 
         return collectedBugs;
     }
@@ -52,8 +56,23 @@ public class ErrorAnnotator extends ExternalAnnotator<Map<String, List<InferBug>
                 TextAttributesKey ErrorAttributes = TextAttributesKey.createTextAttributesKey("INFER_ERROR", HighlighterColors.BAD_CHARACTER);
                 errorProperty.setTextAttributes(ErrorAttributes);
 
+                if (fixesMap == null) {
+                    continue;
+                }
                 // TODO: Create quick fix
-                errorProperty.registerFix(new InferBugQuickFix());
+                for (Map.Entry<String, List<InferBugFix>> bugFixes: fixesMap.entrySet()) {
+                    if (bugFixes.getKey().equals(bug.getHash())) {
+                        for (InferBugFix fix: bugFixes.getValue()) {
+                            errorProperty.registerFix(new InferBugQuickFix(fix));
+                        }
+                        fixesMap.remove(bugFixes);
+                    }
+                }
+                /*
+                //errorProperty.registerFix(new InferBugQuickFix());
+                errorProperty.registerFix(new InferBugQuickFix("Fix A"));
+                errorProperty.registerFix(new InferBugQuickFix("Fix B"));
+                errorProperty.registerFix(new InferBugQuickFix("Fix C"));*/
             }
         }
     }

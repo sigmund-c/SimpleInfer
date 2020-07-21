@@ -29,7 +29,7 @@ import com.intellij.openapi.project.Project;
 public class ResultParser {
     private static final Logger log = Logger.getInstance(ResultParser.class);
 
-    private Map<String, List<InferBug>> bugsPerFile;
+    private Map<String, List<InferBug>> bugsMap;
     private List<InferBug> bugs;
     private PropertyChangeSupport changes = new PropertyChangeSupport( this );
 
@@ -53,7 +53,7 @@ public class ResultParser {
         }
         try {
             rearrangeBugList(readBugList(resultPath));
-            return getBugsPerFile();
+            return getBugsMap();
         } catch (IOException e) {
             log.error("Could not parse given result file", e);
         } catch(JsonSyntaxException e) {
@@ -69,7 +69,7 @@ public class ResultParser {
         }
         try {
             rearrangeBugListByBugType(readBugList(resultPath));
-            return getBugsPerFile();
+            return getBugsMap();
         } catch (IOException e) {
             log.error("Could not parse given result file", e);
         } catch(JsonSyntaxException e) {
@@ -108,7 +108,7 @@ public class ResultParser {
             }
         }
 
-        setBugsPerFile(map);
+        setBugsMap(map);
     }
 
     private void rearrangeBugListByBugType(List<InferBug> bugList) {
@@ -124,17 +124,17 @@ public class ResultParser {
             }
         }
 
-        setBugsPerFile(map);
+        setBugsMap(map);
     }
 
-    public Map<String, List<InferBug>> getBugsPerFile() {
-        return bugsPerFile;
+    public Map<String, List<InferBug>> getBugsMap() {
+        return bugsMap;
     }
 
-    private void setBugsPerFile(Map<String, List<InferBug>> bugsPerFile) {
-        Map<String, List<InferBug>> oldMap = this.bugsPerFile;
-        this.bugsPerFile = bugsPerFile;
-        changes.firePropertyChange("bugsPerFile", oldMap, bugsPerFile);
+    private void setBugsMap(Map<String, List<InferBug>> bugsMap) {
+        Map<String, List<InferBug>> oldMap = this.bugsMap;
+        this.bugsMap = bugsMap;
+        changes.firePropertyChange("bugsMap", oldMap, bugsMap);
     }
 
     private List<InferBug> getBugs() {
