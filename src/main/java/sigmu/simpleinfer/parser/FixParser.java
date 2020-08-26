@@ -63,12 +63,12 @@ public class FixParser {
     private void arrangeFixesByHash(List<InferBugFix> fixesList) {
         Map<String, List<InferBugFix>> map = new HashMap<>();
         for (InferBugFix fix: fixesList) {
-            if(map.containsKey(fix.getBugHash())) {
-                map.get(fix.getBugHash()).add(fix);
+            if(map.containsKey(fix.getHash())) {
+                map.get(fix.getHash()).add(fix);
             } else {
                 final List<InferBugFix> list = new ArrayList<>();
                 list.add(fix);
-                map.put(fix.getBugHash(), list);
+                map.put(fix.getHash(), list);
             }
         }
 

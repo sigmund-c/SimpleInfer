@@ -12,26 +12,29 @@ import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.project.Project;
 
 public class InferConfigurable implements Configurable {
-    private final Project project;
-    private final InferConfigPanel configPanel;
+    private GlobalSettings settings;
+    private InferConfigPanel settingsPanel;
 
-    private String runCmd;
-
-    public InferConfigurable(@NotNull final Project project, @NotNull final InferConfigPanel configPanel) {
-        this.project = project;
-        this.configPanel = new InferConfigPanel();
-        runCmd = "infer run -- mvn compile";
+    public InferConfigurable(GlobalSettings settings) {
+        this.settingsPanel = new InferConfigPanel();
+        if (settings == null) {
+            this.settings = new GlobalSettings();
+        } else {
+            this.settings = settings;
+        }
     }
 
+    @Nls(capitalization = Nls.Capitalization.Title)
     @Override
-    public @Nls(capitalization = Nls.Capitalization.Title) String getDisplayName() {
+    public String getDisplayName() {
         return "Infer Configuration";
     }
 
+    @Nullable
     @Override
-    public @Nullable JComponent createComponent() {
+    public JComponent createComponent() {
         reset();
-        return configPanel;
+        return this.settingsPanel;
     }
 
     @Override
@@ -39,12 +42,18 @@ public class InferConfigurable implements Configurable {
         return false;
     }
 
+    @Override
     public void apply() {
-        runCmd = configPanel.getRunCmd();
+        this.settings.setRunCmd(this.settingsPanel.getRunCmd());
     }
 
-    public String getRunCmd() {
-        return runCmd;
+    @Override
+    public void reset() {
+        int x = 1;
+        this.settingsPanel.setRunCmd(this.settings.getRunCmd());
+        int a = 3;
     }
+
+
 
 }

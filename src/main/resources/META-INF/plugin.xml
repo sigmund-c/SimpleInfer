@@ -11,12 +11,15 @@
          on how to target different products -->
     <depends>com.intellij.modules.platform</depends>
 
+    <version>0.2</version>
+
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="Infer Bugs List" secondary="true" anchor="bottom"
                 factoryClass="sigmu.simpleinfer.ui.InferToolWindowFactory"/>
         <projectService serviceImplementation="sigmu.simpleinfer.parser.ResultParser"/>
         <projectService serviceImplementation="sigmu.simpleinfer.parser.FixParser"/>
-        <configurationType implementation="sigmu.simpleinfer.run.InferRunConfigurationType"/>
+        <configurationType implementation="sigmu.simpleinfer.run.infer.InferRunConfigurationType"/>
+        <configurationType implementation="sigmu.simpleinfer.run.racerdfix.RacerDFixRunConfigurationType"/>
         <externalAnnotator language="JAVA" implementationClass="sigmu.simpleinfer.parser.ErrorAnnotator"/>
 
     </extensions>

@@ -2,6 +2,8 @@ package sigmu.simpleinfer.parser;
 
 import sigmu.simpleinfer.model.InferBug;
 import sigmu.simpleinfer.model.InferBugFix;
+import sigmu.simpleinfer.model.PatchOption;
+import sigmu.simpleinfer.model.Patches;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +34,7 @@ public class ErrorAnnotator extends ExternalAnnotator<Map<String, List<InferBug>
         final Path reportPath = Paths.get(project.getBasePath() + "/infer-out/report.json");
         Map<String, List<InferBug>> collectedBugs = ResultParser.getInstance(project).parse(reportPath);
 
-        final Path fixesPath = Paths.get(project.getBasePath() + "/infer-out/reportfixes.json");
+        final Path fixesPath = Paths.get(project.getBasePath() + "/infer-out/racerdfix_patches.json");
         fixesMap = FixParser.getInstance(project).parse(fixesPath);
 
         return collectedBugs;
@@ -50,6 +52,12 @@ public class ErrorAnnotator extends ExternalAnnotator<Map<String, List<InferBug>
             Document document = PsiDocumentManager.getInstance(project).getDocument(file);
 
             for (InferBug bug: fileBugs.getValue()) {
+                String a = file.getName();
+                String b = bug.getFileName();
+                int t = 1;
+                if (!file.getName().equals(bug.getFileName())) {
+                    continue;
+                }
                 TextRange bugRange = new TextRange(document.getLineStartOffset(bug.getLine() - 1), document.getLineEndOffset(bug.getLine() - 1)); // -1 because getLineEndOffset is 0-indexed
                 Annotation errorProperty = holder.createErrorAnnotation(bugRange, bug.toString()); // Text that shows up when cursor hovers over annotation
 
@@ -63,7 +71,9 @@ public class ErrorAnnotator extends ExternalAnnotator<Map<String, List<InferBug>
                 for (Map.Entry<String, List<InferBugFix>> bugFixes: fixesMap.entrySet()) {
                     if (bugFixes.getKey().equals(bug.getHash())) {
                         for (InferBugFix fix: bugFixes.getValue()) {
-                            errorProperty.registerFix(new InferBugQuickFix(fix));
+                            Patches patches = fix.getPatches();
+                            for (PatchOption patchOption: patches.getPatchOptions())
+                            errorProperty.registerFix(new InferBugQuickFix(patchOption, fix.getFile()));
                         }
                         fixesMap.remove(bugFixes);
                     }

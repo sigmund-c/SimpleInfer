@@ -3,8 +3,8 @@ plugins {
     id 'org.jetbrains.intellij' version '0.4.21'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'sigmu'
+version '0.2'
 
 sourceCompatibility = 1.8
 
@@ -14,19 +14,16 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compileOnly files("\\mnt\\c\\Program Files\\JetBrains\\CLion 2019.1.4\\lib\\clion.jar")
+
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version '2019.3.5'
+    version '2019.3'
 }
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
-}
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+      """
 }

@@ -8,6 +8,7 @@ import sigmu.simpleinfer.parser.ResultParser;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class ParseByFileAction extends AnAction {
         Map<String, List<InferBug>> a = ResultParser.getInstance(project).parse(reportPath);
         //ErrorAnnotator.createBugAnnotations(project, a);
 
-        FileContentUtil.reparseFiles(FileEditorManager.getInstance(project).getOpenFiles());
+        FileContentUtil.reparseFiles(project, Arrays.asList(FileEditorManager.getInstance(project).getOpenFiles()), true);
     }
 
     /*
