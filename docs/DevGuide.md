@@ -1,3 +1,5 @@
+A lot of the code is repurposed from Friedrich Hudinjan's [Infer Integration plugin for IntelliJ.](https://github.com/Carbon459/intellij-infer)
+
 ## Code Overview
 
 # Actions
